@@ -1,0 +1,2676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS ENGINEERING - WORKER DATA MANAGEMENT</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .lock-icon {
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .year-selection, .month-selection, .proceed-section {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        select, button, input {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        select {
+            background-color: var(--light);
+            width: 200px;
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-weight: bold;
+            min-width: 150px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .options {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .option-btn {
+            padding: 20px;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: bold;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1),
+                        -5px -5px 15px rgba(255, 255, 255, 0.8);
+            height: 80px;
+        }
+        
+        .option-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.15),
+                        -8px -8px 20px rgba(255, 255, 255, 0.9);
+        }
+        
+        .back-btn {
+            background: var(--accent);
+            margin-top: 20px;
+        }
+        
+        /* Form Styles */
+        .form-container {
+            display: none;
+            padding: 20px;
+        }
+        
+        .vertical-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="time"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .cancel-btn {
+            background: var(--accent);
+            padding: 10px 15px;
+            min-width: 100px;
+        }
+        
+        /* Table Styles */
+        .table-container {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .edit-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .view-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .pdf-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        /* Time Input Styles */
+        .time-input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .time-input {
+            flex: 1;
+        }
+        
+        /* Report Styles */
+        .report-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px;
+            z-index: 1;
+        }
+        
+        .summary {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .download-btn {
+            background-color: #2ecc71;
+            color: white;
+            margin-top: 20px;
+        }
+        
+        /* 3D Effects */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .btn-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+        }
+        
+        .btn-3d:hover {
+            transform: translateY(-5px) rotateX(10deg);
+        }
+        
+        .btn-3d:active {
+            transform: translateY(0) rotateX(0);
+        }
+        
+        /* Worker table styles */
+        .worker-table {
+            display: none;
+        }
+        
+        .worker-table.active {
+            display: block;
+        }
+        
+        .table-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .table-nav-btn {
+            padding: 5px 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .table-nav-btn.active {
+            background: #2c3e50;
+        }
+        
+        /* Worker name search bar */
+        .worker-name-search {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        /* Pin Management Modal */
+        .pin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .pin-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pin-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .pin-option-btn {
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pin-option-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pin-form {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .pin-form.active {
+            display: block;
+        }
+        
+        .pin-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .pin-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Salary Sheet Styles */
+        .salary-sheet {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .salary-sheet-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .salary-sheet-header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--dark);
+        }
+
+        .salary-sheet-header p {
+            margin: 5px 0 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .salary-details {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .salary-details th, .salary-details td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .salary-details th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .salary-details tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Signature Styles */
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .signature-box {
+            text-align: center;
+            width: 45%;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 50px;
+            padding-top: 5px;
+        }
+    </style>
+    <!-- Include jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <!-- Pin Management Modal -->
+    <div class="pin-modal" id="pinModal">
+        <div class="pin-box">
+            <h2 style="text-align: center; margin-bottom: 20px;">PIN MANAGEMENT</h2>
+            
+            <div id="pinOptions" class="pin-options">
+                <button class="pin-option-btn" id="generatePinBtn">Generate Pin</button>
+                <button class="pin-option-btn" id="changePinBtn">Change Pin</button>
+                <button class="pin-option-btn" id="deletePinBtn">Delete Pin</button>
+                <button class="pin-option-btn back-btn" id="closePinBtn">Close</button>
+            </div>
+            
+            <!-- Generate Pin Form -->
+            <div id="generatePinForm" class="pin-form">
+                <div class="form-group">
+                    <label for="newPin">New PIN:</label>
+                    <input type="password" id="newPin" placeholder="Enter new PIN" maxlength="4" pattern="\d{4}">
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPin">Confirm PIN:</label>
+                    <input type="password" id="confirmNewPin" placeholder="Confirm new PIN" maxlength="4" pattern="\d{4}">
+                </div>
+                <div class="pin-actions">
+                    <button class="btn-3d cancel-btn" id="cancelGeneratePin">Cancel</button>
+                    <button class="btn-3d" id="saveNewPin">Save PIN</button>
+                </div>
+            </div>
+            
+            <!-- Change Pin Form -->
+            <div id="changePinForm" class="pin-form">
+                <div class="form-group">
+                    <label for="oldPin">Old PIN:</label>
+                    <input type="password" id="oldPin" placeholder="Enter old PIN" maxlength="4" pattern="\d{4}">
+                </div>
+                <div class="form-group">
+                    <label for="newChangePin">New PIN:</label>
+                    <input type="password" id="newChangePin" placeholder="Enter new PIN" maxlength="4" pattern="\d{4}">
+                </div>
+                <div class="form-group">
+                    <label for="confirmChangePin">Confirm PIN:</label>
+                    <input type="password" id="confirmChangePin" placeholder="Confirm new PIN" maxlength="4" pattern="\d{4}">
+                </div>
+                <div class="pin-actions">
+                    <button class="btn-3d cancel-btn" id="cancelChangePin">Cancel</button>
+                    <button class="btn-3d" id="saveChangedPin">Change PIN</button>
+                </div>
+            </div>
+            
+            <!-- Delete Pin Form -->
+            <div id="deletePinForm" class="pin-form">
+                <div class="form-group">
+                    <label for="currentPin">Current PIN:</label>
+                    <input type="password" id="currentPin" placeholder="Enter current PIN" maxlength="4" pattern="\d{4}">
+                </div>
+                <div class="pin-actions">
+                    <button class="btn-3d cancel-btn" id="cancelDeletePin">Cancel</button>
+                    <button class="btn-3d" id="confirmDeletePin">Delete PIN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Container -->
+    <div class="container card-3d">
+        <div class="header">
+            <h1>AS ENGINEERING <span class="lock-icon" id="lockIcon">🔒</span></h1>
+            <p>WORKER DATA MANAGEMENT</p>
+        </div>
+        
+        <div class="content">
+            <div class="year-selection">
+                <h3>SELECT YEAR</h3>
+                <select id="yearSelect">
+                    <option value="">-- Select Year --</option>
+                </select>
+                <button id="addYearBtn" class="btn-3d">+ Add Year</button>
+            </div>
+            
+            <div class="month-selection">
+                <h3>SELECT MONTH</h3>
+                <select id="monthSelect" disabled>
+                    <option value="">-- Select Month --</option>
+                </select>
+            </div>
+            
+            <div class="proceed-section">
+                <button id="proceedBtn" class="btn-3d" disabled>PROCEED</button>
+            </div>
+            
+            <div class="options" id="mainOptions">
+                <div class="option-btn btn-3d" id="workerDataBtn">WORKER DATA</div>
+                <div class="option-btn btn-3d" id="attendanceBtn">ATTENDANCE</div>
+                <div class="option-btn btn-3d" id="salaryRecordBtn">SALARY RECORD</div>
+                <div class="option-btn btn-3d" id="reportsBtn">REPORTS</div>
+                <button class="back-btn btn-3d" id="backBtn">BACK</button>
+            </div>
+            
+            <!-- Worker Data Form -->
+            <div class="form-container" id="workerDataForm">
+                <h2>Worker Data Entry</h2>
+                <form id="workerForm" class="vertical-form">
+                    <div class="form-group">
+                        <label for="workerName">Name:</label>
+                        <input type="text" id="workerName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="workerId">ID No.:</label>
+                        <input type="text" id="workerId" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="department">Department:</label>
+                        <input type="text" id="department" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobileNo">Mobile No.:</label>
+                        <input type="tel" id="mobileNo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea id="address" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="basicSalary">Basic Salary:</label>
+                        <input type="number" id="basicSalary" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="cancelWorkerBtn" class="btn-3d cancel-btn">Cancel</button>
+                        <button type="submit" class="btn-3d">Save</button>
+                    </div>
+                </form>
+                
+                <div class="table-container">
+                    <input type="text" class="search-bar" id="workerSearch" placeholder="Search workers by name or ID...">
+                    <table id="workerTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>ID No.</th>
+                                <th>Department</th>
+                                <th>Mobile No.</th>
+                                <th>Basic Salary</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Worker data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Attendance Form -->
+            <div class="form-container" id="attendanceForm">
+                <h2>Attendance Entry</h2>
+                <form id="attendanceEntryForm" class="vertical-form">
+                    <div class="form-group">
+                        <label for="attendanceDate">Date:</label>
+                        <input type="date" id="attendanceDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attendanceYear">Year:</label>
+                        <input type="text" id="attendanceYear" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attendanceMonth">Month:</label>
+                        <input type="text" id="attendanceMonth" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attendanceWorker">Select Name:</label>
+                        <select id="attendanceWorker" required>
+                            <option value="">-- Select Worker --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attendanceId">ID No.:</label>
+                        <input type="text" id="attendanceId" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attendanceStatus">Status:</label>
+                        <select id="attendanceStatus" required>
+                            <option value="">-- Select Status --</option>
+                            <option value="P">P (Present)</option>
+                            <option value="A">A (Absent)</option>
+                            <option value="H">H (Holiday)</option>
+                            <option value="HP">HP (Holiday Present)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="time-fields" id="timeFields">
+                        <div class="form-group">
+                            <label>Time In:</label>
+                            <input type="time" id="timeIn" step="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Time Out:</label>
+                            <input type="time" id="timeOut" step="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="actualWork">Actual Work Hrs:</label>
+                            <input type="text" id="actualWork" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="overTime">Over Time:</label>
+                            <input type="text" id="overTime" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="totalWork">Total Work Hrs:</label>
+                            <input type="text" id="totalWork" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="cancelAttendanceBtn" class="btn-3d cancel-btn">Cancel</button>
+                        <button type="submit" class="btn-3d">Save Attendance</button>
+                    </div>
+                </form>
+                
+                <div class="table-container">
+                    <div class="worker-name-search">
+                        <input type="text" class="search-bar" id="workerNameSearch" placeholder="Search by worker name or ID...">
+                    </div>
+                    <div class="table-nav" id="tableNav">
+                        <!-- Table navigation buttons will be added here -->
+                    </div>
+                    <input type="text" class="search-bar" id="attendanceSearch" placeholder="Search attendance by day (1-31) or full date (DD-MM-YYYY)...">
+                    <div id="attendanceTablesContainer">
+                        <!-- Attendance tables will be added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Attendance Report -->
+            <div class="form-container" id="attendanceReport">
+                <div class="report-header">
+                    <h2>AS ENGINEERING</h2>
+                    <h3>ATTENDANCE REPORT</h3>
+                    <p id="reportWorkerName"></p>
+                    <p id="reportWorkerId"></p>
+                    <p id="reportYearMonth"></p>
+                </div>
+                
+                <div class="report-container">
+                    <table id="reportTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                                <th>Actual Work Hrs</th>
+                                <th>Over Time</th>
+                                <th>Total Work Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Report data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="summary">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Particular</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Total Present:</td>
+                                <td id="totalPresent">0</td>
+                            </tr>
+                            <tr>
+                                <td>Total Absent:</td>
+                                <td id="totalAbsent">0</td>
+                            </tr>
+                            <tr>
+                                <td>Total Holiday:</td>
+                                <td id="totalHoliday">0</td>
+                            </tr>
+                            <tr>
+                                <td>Total HP:</td>
+                                <td id="totalHP">0</td>
+                            </tr>
+                            <tr>
+                                <td>Total Actual Work Hrs:</td>
+                                <td id="totalActualWork">0</td>
+                            </tr>
+                            <tr>
+                                <td>Total Over Time:</td>
+                                <td id="totalOverTime">0</td>
+                            </tr>
+                            <tr>
+                                <td>Monthly Work Hrs:</td>
+                                <td id="monthlyWorkHrs">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <button id="downloadPdfBtn" class="btn-3d download-btn">Download PDF</button>
+                <button id="closeReportBtn" class="btn-3d back-btn">Close Report</button>
+            </div>
+            
+            <!-- Salary Record Section -->
+            <div class="form-container" id="salaryRecordSection">
+                <h2>Salary Record</h2>
+                <form id="salaryForm" class="vertical-form">
+                    <div class="form-group">
+                        <label for="salaryWorker">Select Name:</label>
+                        <select id="salaryWorker" required>
+                            <option value="">-- Select Worker --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="salaryWorkerId">ID No.:</label>
+                        <input type="text" id="salaryWorkerId" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="salaryYear">Year:</label>
+                        <input type="text" id="salaryYear" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="salaryMonth">Month:</label>
+                        <input type="text" id="salaryMonth" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="previousAdvance">Previous Advance:</label>
+                        <input type="number" id="previousAdvance" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currentAdvance">Current Advance:</label>
+                        <input type="number" id="currentAdvance" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentStatus">Payment Status:</label>
+                        <select id="paymentStatus" required>
+                            <option value="">-- Select Status --</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Partial">Partial</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentDate">Payment Date:</label>
+                        <input type="date" id="paymentDate">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="cancelSalaryBtn" class="btn-3d cancel-btn">Cancel</button>
+                        <button type="submit" class="btn-3d">Save Salary</button>
+                    </div>
+                </form>
+                
+                <div class="table-container">
+                    <input type="text" class="search-bar" id="salarySearch" placeholder="Search salary records by name or ID...">
+                    <table id="salaryTable">
+                        <thead>
+                            <tr>
+                                <th>Serial No.</th>
+                                <th>Name</th>
+                                <th>ID No.</th>
+                                <th>Year-Month</th>
+                                <th>Total Present</th>
+                                <th>Total Absent</th>
+                                <th>Total Holiday</th>
+                                <th>Actual Work</th>
+                                <th>Overtime</th>
+                                <th>Final Work Hrs</th>
+                                <th>Holiday Bonus</th>
+                                <th>Basic Salary</th>
+                                <th>Net Salary</th>
+                                <th>Prev. Advance</th>
+                                <th>Curr. Advance</th>
+                                <th>Closing Balance</th>
+                                <th>Payment Status</th>
+                                <th>Payment Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Salary data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Salary Sheet View -->
+            <div class="form-container" id="salarySheetView">
+                <div class="salary-sheet">
+                    <div class="salary-sheet-header">
+                        <h2>AS ENGINEERING</h2>
+                        <p>khasra No. 177, Village Kanshi Delhi road Meerut Uttar Pradesh - 250002</p>
+                        <h3>SALARY SLIP</h3>
+                        <p id="salarySheetYearMonth"></p>
+                    </div>
+                    
+                    <div class="worker-info">
+                        <p><strong>Name:</strong> <span id="sheetWorkerName"></span></p>
+                        <p><strong>ID No.:</strong> <span id="sheetWorkerId"></span></p>
+                    </div>
+                    
+                    <table class="salary-details">
+                        <thead>
+                            <tr>
+                                <th>Particular</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Total Present Days</td>
+                                <td id="sheetTotalPresent"></td>
+                            </tr>
+                            <tr>
+                                <td>Total Absent Days</td>
+                                <td id="sheetTotalAbsent"></td>
+                            </tr>
+                            <tr>
+                                <td>Total Holiday Days</td>
+                                <td id="sheetTotalHoliday"></td>
+                            </tr>
+                            <tr>
+                                <td>Total Actual Work Hours</td>
+                                <td id="sheetTotalActualWork"></td>
+                            </tr>
+                            <tr>
+                                <td>Total Overtime Hours</td>
+                                <td id="sheetTotalOvertime"></td>
+                            </tr>
+                            <tr>
+                                <td>Final Work Hours</td>
+                                <td id="sheetFinalWorkHours"></td>
+                            </tr>
+                            <tr>
+                                <td>Basic Salary</td>
+                                <td id="sheetBasicSalary"></td>
+                            </tr>
+                            <tr>
+                                <td>Holiday Bonus</td>
+                                <td id="sheetHolidayBonus"></td>
+                            </tr>
+                            <tr>
+                                <td>Net Salary</td>
+                                <td id="sheetNetSalary"></td>
+                            </tr>
+                            <tr>
+                                <td>Previous Advance</td>
+                                <td id="sheetPreviousAdvance"></td>
+                            </tr>
+                            <tr>
+                                <td>Current Advance</td>
+                                <td id="sheetCurrentAdvance"></td>
+                            </tr>
+                            <tr>
+                                <td>Closing Balance</td>
+                                <td id="sheetClosingBalance"></td>
+                            </tr>
+                            <tr>
+                                <td>Payment Status</td>
+                                <td id="sheetPaymentStatus"></td>
+                            </tr>
+                            <tr>
+                                <td>Payment Date</td>
+                                <td id="sheetPaymentDate"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="signature-section">
+                        <div class="signature-box">
+                            <div class="signature-line">Receiver Signature</div>
+                        </div>
+                        <div class="signature-box">
+                            <div class="signature-line">Manager Signature</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="downloadSalaryPdfBtn" class="btn-3d download-btn">Download PDF</button>
+                <button id="closeSalarySheetBtn" class="btn-3d back-btn">Close Salary Sheet</button>
+            </div>
+            
+            <!-- Reports Section -->
+            <div class="form-container" id="reportsSection">
+                <h2>Reports</h2>
+                <p style="text-align: center; font-size: 24px; margin: 50px 0; color: var(--primary);">COMING SOON</p>
+                <button id="backFromReportsBtn" class="btn-3d back-btn">BACK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+        
+        // Current year for the year selector
+        const currentYear = new Date().getFullYear();
+        
+        // Months array
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        
+        // DOM Elements
+        const yearSelect = document.getElementById('yearSelect');
+        const addYearBtn = document.getElementById('addYearBtn');
+        const monthSelect = document.getElementById('monthSelect');
+        const proceedBtn = document.getElementById('proceedBtn');
+        const mainOptions = document.getElementById('mainOptions');
+        const backBtn = document.getElementById('backBtn');
+        
+        // Worker Data Elements
+        const workerDataBtn = document.getElementById('workerDataBtn');
+        const workerDataForm = document.getElementById('workerDataForm');
+        const workerForm = document.getElementById('workerForm');
+        const cancelWorkerBtn = document.getElementById('cancelWorkerBtn');
+        const workerTable = document.getElementById('workerTable').getElementsByTagName('tbody')[0];
+        const workerSearch = document.getElementById('workerSearch');
+        
+        // Attendance Elements
+        const attendanceBtn = document.getElementById('attendanceBtn');
+        const attendanceForm = document.getElementById('attendanceForm');
+        const attendanceEntryForm = document.getElementById('attendanceEntryForm');
+        const cancelAttendanceBtn = document.getElementById('cancelAttendanceBtn');
+        const tableNav = document.getElementById('tableNav');
+        const attendanceTablesContainer = document.getElementById('attendanceTablesContainer');
+        const attendanceStatus = document.getElementById('attendanceStatus');
+        const timeFields = document.getElementById('timeFields');
+        const timeIn = document.getElementById('timeIn');
+        const timeOut = document.getElementById('timeOut');
+        const actualWork = document.getElementById('actualWork');
+        const overTime = document.getElementById('overTime');
+        const totalWork = document.getElementById('totalWork');
+        const attendanceWorker = document.getElementById('attendanceWorker');
+        const attendanceId = document.getElementById('attendanceId');
+        const attendanceSearch = document.getElementById('attendanceSearch');
+        const workerNameSearch = document.getElementById('workerNameSearch');
+        
+        // Report Elements
+        const attendanceReport = document.getElementById('attendanceReport');
+        const reportTable = document.getElementById('reportTable').getElementsByTagName('tbody')[0];
+        const reportWorkerName = document.getElementById('reportWorkerName');
+        const reportWorkerId = document.getElementById('reportWorkerId');
+        const reportYearMonth = document.getElementById('reportYearMonth');
+        const closeReportBtn = document.getElementById('closeReportBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        
+        // Salary Record Elements
+        const salaryRecordBtn = document.getElementById('salaryRecordBtn');
+        const salaryRecordSection = document.getElementById('salaryRecordSection');
+        const salaryForm = document.getElementById('salaryForm');
+        const salaryWorker = document.getElementById('salaryWorker');
+        const salaryWorkerId = document.getElementById('salaryWorkerId');
+        const salaryYear = document.getElementById('salaryYear');
+        const salaryMonth = document.getElementById('salaryMonth');
+        const previousAdvance = document.getElementById('previousAdvance');
+        const currentAdvance = document.getElementById('currentAdvance');
+        const paymentStatus = document.getElementById('paymentStatus');
+        const paymentDate = document.getElementById('paymentDate');
+        const cancelSalaryBtn = document.getElementById('cancelSalaryBtn');
+        const salaryTable = document.getElementById('salaryTable').getElementsByTagName('tbody')[0];
+        const salarySearch = document.getElementById('salarySearch');
+        
+        // Salary Sheet View Elements
+        const salarySheetView = document.getElementById('salarySheetView');
+        const salarySheetYearMonth = document.getElementById('salarySheetYearMonth');
+        const sheetWorkerName = document.getElementById('sheetWorkerName');
+        const sheetWorkerId = document.getElementById('sheetWorkerId');
+        const sheetTotalPresent = document.getElementById('sheetTotalPresent');
+        const sheetTotalAbsent = document.getElementById('sheetTotalAbsent');
+        const sheetTotalHoliday = document.getElementById('sheetTotalHoliday');
+        const sheetTotalActualWork = document.getElementById('sheetTotalActualWork');
+        const sheetTotalOvertime = document.getElementById('sheetTotalOvertime');
+        const sheetFinalWorkHours = document.getElementById('sheetFinalWorkHours');
+        const sheetBasicSalary = document.getElementById('sheetBasicSalary');
+        const sheetHolidayBonus = document.getElementById('sheetHolidayBonus');
+        const sheetNetSalary = document.getElementById('sheetNetSalary');
+        const sheetPreviousAdvance = document.getElementById('sheetPreviousAdvance');
+        const sheetCurrentAdvance = document.getElementById('sheetCurrentAdvance');
+        const sheetClosingBalance = document.getElementById('sheetClosingBalance');
+        const sheetPaymentStatus = document.getElementById('sheetPaymentStatus');
+        const sheetPaymentDate = document.getElementById('sheetPaymentDate');
+        const downloadSalaryPdfBtn = document.getElementById('downloadSalaryPdfBtn');
+        const closeSalarySheetBtn = document.getElementById('closeSalarySheetBtn');
+        
+        // Reports Elements
+        const reportsBtn = document.getElementById('reportsBtn');
+        const reportsSection = document.getElementById('reportsSection');
+        const backFromReportsBtn = document.getElementById('backFromReportsBtn');
+        
+        // Pin Management Elements
+        const lockIcon = document.getElementById('lockIcon');
+        const pinModal = document.getElementById('pinModal');
+        const pinOptions = document.getElementById('pinOptions');
+        const generatePinBtn = document.getElementById('generatePinBtn');
+        const changePinBtn = document.getElementById('changePinBtn');
+        const deletePinBtn = document.getElementById('deletePinBtn');
+        const closePinBtn = document.getElementById('closePinBtn');
+        
+        const generatePinForm = document.getElementById('generatePinForm');
+        const newPinInput = document.getElementById('newPin');
+        const confirmNewPinInput = document.getElementById('confirmNewPin');
+        const saveNewPinBtn = document.getElementById('saveNewPin');
+        const cancelGeneratePin = document.getElementById('cancelGeneratePin');
+        
+        const changePinForm = document.getElementById('changePinForm');
+        const oldPinInput = document.getElementById('oldPin');
+        const newChangePinInput = document.getElementById('newChangePin');
+        const confirmChangePinInput = document.getElementById('confirmChangePin');
+        const saveChangedPinBtn = document.getElementById('saveChangedPin');
+        const cancelChangePin = document.getElementById('cancelChangePin');
+        
+        const deletePinForm = document.getElementById('deletePinForm');
+        const currentPinInput = document.getElementById('currentPin');
+        const confirmDeletePinBtn = document.getElementById('confirmDeletePin');
+        const cancelDeletePin = document.getElementById('cancelDeletePin');
+        
+        // Data Storage
+        let workers = [];
+        let attendanceRecords = [];
+        let salaryRecords = [];
+        let selectedYear = '';
+        let selectedMonth = '';
+        let currentWorkerReport = null;
+        let currentSalaryRecord = null;
+        let activeTableId = '';
+        let pin = localStorage.getItem('app_pin') || '';
+        
+        // Initialize the application
+        function init() {
+            // Populate months
+            monthSelect.innerHTML = '<option value="">-- Select Month --</option>';
+            months.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = month;
+                monthSelect.appendChild(option);
+            });
+            
+            // Load saved years if any
+            loadSavedYears();
+            
+            // Event Listeners
+            addYearBtn.addEventListener('click', confirmAddNewYear);
+            yearSelect.addEventListener('change', handleYearSelect);
+            monthSelect.addEventListener('change', handleMonthSelect);
+            proceedBtn.addEventListener('click', handleProceed);
+            backBtn.addEventListener('click', handleBack);
+            
+            // Worker Data Events
+            workerDataBtn.addEventListener('click', showWorkerDataForm);
+            workerForm.addEventListener('submit', handleWorkerFormSubmit);
+            cancelWorkerBtn.addEventListener('click', () => {
+                workerDataForm.style.display = 'none';
+                mainOptions.style.display = 'flex';
+            });
+            workerSearch.addEventListener('input', searchWorkers);
+            
+            // Attendance Events
+            attendanceBtn.addEventListener('click', showAttendanceForm);
+            attendanceEntryForm.addEventListener('submit', handleAttendanceFormSubmit);
+            cancelAttendanceBtn.addEventListener('click', () => {
+                attendanceForm.style.display = 'none';
+                mainOptions.style.display = 'flex';
+            });
+            attendanceStatus.addEventListener('change', handleAttendanceStatusChange);
+            attendanceWorker.addEventListener('change', handleWorkerSelect);
+            attendanceSearch.addEventListener('input', searchAttendance);
+            workerNameSearch.addEventListener('input', searchWorkerTables);
+            
+            // Time calculation events
+            timeIn.addEventListener('change', calculateWorkHours);
+            timeOut.addEventListener('change', calculateWorkHours);
+            
+            // Report Events
+            closeReportBtn.addEventListener('click', () => {
+                attendanceReport.style.display = 'none';
+                attendanceForm.style.display = 'block';
+            });
+            
+            downloadPdfBtn.addEventListener('click', downloadAttendancePdf);
+            
+            // Salary Record Events
+            salaryRecordBtn.addEventListener('click', showSalaryRecordForm);
+            salaryForm.addEventListener('submit', handleSalaryFormSubmit);
+            cancelSalaryBtn.addEventListener('click', () => {
+                salaryRecordSection.style.display = 'none';
+                mainOptions.style.display = 'flex';
+            });
+            salaryWorker.addEventListener('change', handleSalaryWorkerSelect);
+            salarySearch.addEventListener('input', searchSalaryRecords);
+            
+            // Salary Sheet View Events
+            closeSalarySheetBtn.addEventListener('click', () => {
+                salarySheetView.style.display = 'none';
+                salaryRecordSection.style.display = 'block';
+            });
+            
+            downloadSalaryPdfBtn.addEventListener('click', downloadSalaryPdf);
+            
+            // Reports Events
+            reportsBtn.addEventListener('click', () => {
+                mainOptions.style.display = 'none';
+                reportsSection.style.display = 'block';
+            });
+            
+            backFromReportsBtn.addEventListener('click', () => {
+                reportsSection.style.display = 'none';
+                mainOptions.style.display = 'flex';
+            });
+            
+            // Pin Management Events
+            lockIcon.addEventListener('click', togglePinManagement);
+            generatePinBtn.addEventListener('click', () => {
+                pinOptions.style.display = 'none';
+                generatePinForm.classList.add('active');
+            });
+            
+            changePinBtn.addEventListener('click', () => {
+                pinOptions.style.display = 'none';
+                changePinForm.classList.add('active');
+            });
+            
+            deletePinBtn.addEventListener('click', () => {
+                pinOptions.style.display = 'none';
+                deletePinForm.classList.add('active');
+            });
+            
+            closePinBtn.addEventListener('click', closePinManagement);
+            
+            // Generate Pin Form Events
+            saveNewPinBtn.addEventListener('click', saveNewPin);
+            cancelGeneratePin.addEventListener('click', resetPinForms);
+            
+            // Change Pin Form Events
+            saveChangedPinBtn.addEventListener('click', changePin);
+            cancelChangePin.addEventListener('click', resetPinForms);
+            
+            // Delete Pin Form Events
+            confirmDeletePinBtn.addEventListener('click', deletePin);
+            cancelDeletePin.addEventListener('click', resetPinForms);
+            
+            // Show/hide pin options based on whether pin exists
+            updatePinOptionsVisibility();
+        }
+        
+        // Show salary record form
+        function showSalaryRecordForm() {
+            mainOptions.style.display = 'none';
+            salaryRecordSection.style.display = 'block';
+            
+            // Set year and month
+            salaryYear.value = selectedYear;
+            salaryMonth.value = months[selectedMonth - 1];
+            
+            // Load workers for dropdown
+            updateSalaryWorkerDropdown();
+            
+            // Load salary records
+            loadSalaryRecords();
+        }
+        
+        // Handle salary worker selection
+        function handleSalaryWorkerSelect() {
+            const workerId = salaryWorker.value;
+            const worker = workers.find(w => w.id === workerId);
+            
+            if (worker) {
+                salaryWorkerId.value = worker.id;
+            } else {
+                salaryWorkerId.value = '';
+            }
+        }
+        
+        // Update salary worker dropdown
+        function updateSalaryWorkerDropdown() {
+            salaryWorker.innerHTML = '<option value="">-- Select Worker --</option>';
+            
+            // Load all workers from localStorage
+            const allWorkers = JSON.parse(localStorage.getItem('workers')) || [];
+            
+            allWorkers.forEach(worker => {
+                const option = document.createElement('option');
+                option.value = worker.id;
+                option.textContent = worker.name;
+                salaryWorker.appendChild(option);
+            });
+        }
+        
+        // Handle salary form submission
+        function handleSalaryFormSubmit(e) {
+            e.preventDefault();
+            
+            const workerId = salaryWorker.value;
+            const worker = workers.find(w => w.id === workerId);
+            
+            if (!worker) {
+                alert('Please select a valid worker');
+                return;
+            }
+            
+            // Get attendance data for this worker
+            const attendanceData = getAttendanceDataForWorker(workerId);
+            
+            // Calculate salary components
+            const basicSalary = parseFloat(worker.salary);
+            const totalPresent = attendanceData.totalPresent;
+            const totalAbsent = attendanceData.totalAbsent;
+            const totalHoliday = attendanceData.totalHoliday;
+            const totalActualWork = parseFloat(attendanceData.totalActualWork);
+            const totalOverTime = parseFloat(attendanceData.totalOverTime);
+            const finalWorkHours = totalActualWork + totalOverTime;
+            
+            // Calculate holiday bonus
+            const holidayBonus = (basicSalary / 30) * totalHoliday;
+            
+            // Calculate net salary
+            const netSalary = ((basicSalary / 30 / 8) * finalWorkHours) + holidayBonus;
+            
+            // Get form values
+            const prevAdvance = parseFloat(previousAdvance.value) || 0;
+            const currAdvance = parseFloat(currentAdvance.value) || 0;
+            const payStatus = paymentStatus.value;
+            const payDate = paymentDate.value;
+            
+            // Calculate closing balance
+            const closingBalance = netSalary - prevAdvance + currAdvance;
+            
+            const salaryRecord = {
+                workerId: workerId,
+                workerName: worker.name,
+                year: selectedYear,
+                month: selectedMonth,
+                monthName: months[selectedMonth - 1],
+                totalPresent: totalPresent,
+                totalAbsent: totalAbsent,
+                totalHoliday: totalHoliday,
+                totalActualWork: totalActualWork.toFixed(2),
+                totalOverTime: totalOverTime.toFixed(2),
+                finalWorkHours: finalWorkHours.toFixed(2),
+                holidayBonus: holidayBonus.toFixed(2),
+                basicSalary: basicSalary.toFixed(2),
+                netSalary: netSalary.toFixed(2),
+                previousAdvance: prevAdvance.toFixed(2),
+                currentAdvance: currAdvance.toFixed(2),
+                closingBalance: closingBalance.toFixed(2),
+                paymentStatus: payStatus,
+                paymentDate: payDate
+            };
+            
+            // Check if record already exists for this worker and month
+            const existingIndex = salaryRecords.findIndex(r => 
+                r.workerId === workerId && r.year === selectedYear && r.month === selectedMonth
+            );
+            
+            if (existingIndex >= 0) {
+                // Update existing record
+                salaryRecords[existingIndex] = salaryRecord;
+            } else {
+                // Add new record
+                salaryRecords.push(salaryRecord);
+            }
+            
+            saveSalaryRecords();
+            loadSalaryRecords();
+            
+            // Reset form
+            salaryForm.reset();
+            salaryYear.value = selectedYear;
+            salaryMonth.value = months[selectedMonth - 1];
+        }
+        
+        // Get attendance data for a worker
+        function getAttendanceDataForWorker(workerId) {
+            // Load attendance records for current year and month
+            const attendanceRecords = JSON.parse(localStorage.getItem(`attendance_${selectedYear}_${selectedMonth}`)) || [];
+            
+            // Filter records for this worker
+            const workerRecords = attendanceRecords.filter(record => record.workerId === workerId);
+            
+            // Calculate summary
+            const totalPresent = workerRecords.filter(r => r.status === 'P' || r.status === 'HP').length;
+            const totalAbsent = workerRecords.filter(r => r.status === 'A').length;
+            const totalHoliday = workerRecords.filter(r => r.status === 'H' || r.status === 'HP').length;
+            
+            // Calculate work hours
+            let totalActualWork = 0;
+            let totalOverTime = 0;
+            
+            workerRecords.forEach(record => {
+                if (record.actualWork) totalActualWork += parseFloat(record.actualWork);
+                if (record.overTime) totalOverTime += parseFloat(record.overTime);
+            });
+            
+            return {
+                totalPresent,
+                totalAbsent,
+                totalHoliday,
+                totalActualWork,
+                totalOverTime
+            };
+        }
+        
+        // Save salary records to localStorage
+        function saveSalaryRecords() {
+            localStorage.setItem(`salary_${selectedYear}_${selectedMonth}`, JSON.stringify(salaryRecords));
+        }
+        
+        // Load salary records from localStorage
+        function loadSalaryRecords() {
+            salaryRecords = JSON.parse(localStorage.getItem(`salary_${selectedYear}_${selectedMonth}`)) || [];
+            salaryTable.innerHTML = '';
+            
+            salaryRecords.forEach((record, index) => {
+                const row = salaryTable.insertRow();
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${record.workerName}</td>
+                    <td>${record.workerId}</td>
+                    <td>${record.year}-${record.monthName}</td>
+                    <td>${record.totalPresent}</td>
+                    <td>${record.totalAbsent}</td>
+                    <td>${record.totalHoliday}</td>
+                    <td>${record.totalActualWork}</td>
+                    <td>${record.totalOverTime}</td>
+                    <td>${record.finalWorkHours}</td>
+                    <td>${record.holidayBonus}</td>
+                    <td>${record.basicSalary}</td>
+                    <td>${record.netSalary}</td>
+                    <td>${record.previousAdvance}</td>
+                    <td>${record.currentAdvance}</td>
+                    <td>${record.closingBalance}</td>
+                    <td>${record.paymentStatus}</td>
+                    <td>${record.paymentDate ? formatDateForDisplay(record.paymentDate) : '-'}</td>
+                    <td>
+                        <button class="action-btn view-btn">View</button>
+                        <button class="action-btn edit-btn">Edit</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                        <button class="action-btn pdf-btn">PDF</button>
+                    </td>
+                `;
+                
+                // Add event listeners to buttons
+                row.querySelector('.view-btn').addEventListener('click', () => viewSalarySheet(record));
+                row.querySelector('.edit-btn').addEventListener('click', () => editSalaryRecord(record, row));
+                row.querySelector('.delete-btn').addEventListener('click', () => deleteSalaryRecord(record.workerId));
+                row.querySelector('.pdf-btn').addEventListener('click', () => downloadSalaryPdf(record));
+            });
+        }
+        
+        // View salary sheet
+        function viewSalarySheet(record) {
+            sheetWorkerName.textContent = record.workerName;
+            sheetWorkerId.textContent = record.workerId;
+            salarySheetYearMonth.textContent = `${record.year} ${record.monthName}`;
+            
+            sheetTotalPresent.textContent = record.totalPresent;
+            sheetTotalAbsent.textContent = record.totalAbsent;
+            sheetTotalHoliday.textContent = record.totalHoliday;
+            sheetTotalActualWork.textContent = record.totalActualWork;
+            sheetTotalOvertime.textContent = record.totalOverTime;
+            sheetFinalWorkHours.textContent = record.finalWorkHours;
+            sheetBasicSalary.textContent = record.basicSalary;
+            sheetHolidayBonus.textContent = record.holidayBonus;
+            sheetNetSalary.textContent = record.netSalary;
+            sheetPreviousAdvance.textContent = record.previousAdvance;
+            sheetCurrentAdvance.textContent = record.currentAdvance;
+            sheetClosingBalance.textContent = record.closingBalance;
+            sheetPaymentStatus.textContent = record.paymentStatus;
+            sheetPaymentDate.textContent = record.paymentDate ? formatDateForDisplay(record.paymentDate) : '-';
+            
+            // Store current record for PDF download
+            currentSalaryRecord = record;
+            
+            // Show salary sheet view
+            salaryRecordSection.style.display = 'none';
+            salarySheetView.style.display = 'block';
+        }
+        
+        // Edit salary record
+        function editSalaryRecord(record, row) {
+            if (pin) {
+                const enteredPin = prompt('Enter PIN to edit salary record:');
+                if (enteredPin !== pin) {
+                    if (enteredPin !== null) {
+                        alert('Incorrect PIN');
+                    }
+                    return;
+                }
+            }
+            
+            // Find the worker
+            const worker = workers.find(w => w.id === record.workerId);
+            if (!worker) {
+                alert('Worker not found');
+                return;
+            }
+            
+            // Set form values
+            salaryWorker.value = record.workerId;
+            salaryWorkerId.value = record.workerId;
+            salaryYear.value = record.year;
+            salaryMonth.value = months[record.month - 1];
+            previousAdvance.value = record.previousAdvance;
+            currentAdvance.value = record.currentAdvance;
+            paymentStatus.value = record.paymentStatus;
+            paymentDate.value = record.paymentDate || '';
+            
+            // Remove the record from the array
+            salaryRecords = salaryRecords.filter(r => 
+                !(r.workerId === record.workerId && r.year === record.year && r.month === record.month)
+            );
+            
+            // Remove the row from the table
+            row.remove();
+        }
+        
+        // Delete salary record
+        function deleteSalaryRecord(workerId) {
+            if (pin) {
+                const enteredPin = prompt('Enter PIN to delete salary record:');
+                if (enteredPin !== pin) {
+                    if (enteredPin !== null) {
+                        alert('Incorrect PIN');
+                    }
+                    return;
+                }
+            }
+            
+            if (confirm('Are you sure you want to delete this salary record?')) {
+                salaryRecords = salaryRecords.filter(record => 
+                    !(record.workerId === workerId && record.year === selectedYear && record.month === selectedMonth)
+                );
+                saveSalaryRecords();
+                loadSalaryRecords();
+            }
+        }
+        
+        // Search salary records
+        function searchSalaryRecords() {
+            const searchTerm = salarySearch.value.toLowerCase();
+            const rows = salaryTable.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const name = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+                const id = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || id.includes(searchTerm)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+        
+        // Download salary as PDF
+        function downloadSalaryPdf(record = null) {
+            const salaryRecord = record || currentSalaryRecord;
+            if (!salaryRecord) return;
+            
+            // Create new PDF document
+            const doc = new jsPDF();
+            
+            // Add border to the page
+            doc.setDrawColor(0);
+            doc.setLineWidth(0.5);
+            doc.rect(10, 10, 190, 277); // A4 size: 210x297mm, leaving 10mm margins
+            
+            // Add header with changed titles
+            doc.setFontSize(18);
+            doc.text('AS ENGINEERING', 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('khasra No. 177, Village Kanshi Delhi road Meerut Uttar Pradesh - 250002', 105, 27, { align: 'center' });
+            doc.setFontSize(16);
+            doc.text('SALARY SLIP', 105, 35, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text(`${salaryRecord.year} ${salaryRecord.monthName}`, 105, 43, { align: 'center' });
+            
+            // Add worker info
+            doc.setFontSize(12);
+            doc.text(`Name: ${salaryRecord.workerName}`, 20, 55);
+            doc.text(`ID No.: ${salaryRecord.workerId}`, 20, 63);
+            
+            // Prepare data for the table
+            const tableData = [
+                ['Total Present Days', salaryRecord.totalPresent],
+                ['Total Absent Days', salaryRecord.totalAbsent],
+                ['Total Holiday Days', salaryRecord.totalHoliday],
+                ['Total Actual Work Hours', salaryRecord.totalActualWork],
+                ['Total Overtime Hours', salaryRecord.totalOverTime],
+                ['Final Work Hours', salaryRecord.finalWorkHours],
+                ['Basic Salary', salaryRecord.basicSalary],
+                ['Holiday Bonus', salaryRecord.holidayBonus],
+                ['Net Salary', salaryRecord.netSalary],
+                ['Previous Advance', salaryRecord.previousAdvance],
+                ['Current Advance', salaryRecord.currentAdvance],
+                ['Closing Balance', salaryRecord.closingBalance],
+                ['Payment Status', salaryRecord.paymentStatus],
+                ['Payment Date', salaryRecord.paymentDate ? formatDateForDisplay(salaryRecord.paymentDate) : '-']
+            ];
+            
+            // Add table with proper styling and borders
+            doc.autoTable({
+                head: [['Particular', 'Value']],
+                body: tableData,
+                startY: 70,
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 3,
+                    halign: 'left',
+                    valign: 'middle',
+                    lineColor: [0, 0, 0], // Black borders
+                    lineWidth: 0.5
+                },
+                headStyles: {
+                    fillColor: [52, 152, 219],
+                    textColor: 255,
+                    fontStyle: 'bold',
+                    lineWidth: 0.5
+                },
+                columnStyles: {
+                    0: { fontStyle: 'bold', cellWidth: 'auto' },
+                    1: { cellWidth: 'auto' }
+                },
+                margin: { top: 70 },
+                tableLineWidth: 0.5
+            });
+            
+            // Add signature section
+            const finalY = doc.lastAutoTable.finalY + 15;
+            doc.setFontSize(12);
+            doc.text('Receiver Signature', 50, finalY + 30);
+            doc.text('Manager Signature', 150, finalY + 30);
+            
+            // Add signature lines
+            doc.setLineWidth(0.5);
+            doc.line(40, finalY + 35, 90, finalY + 35);
+            doc.line(140, finalY + 35, 190, finalY + 35);
+            
+            // Add current date at bottom
+            const today = new Date();
+            doc.setFontSize(10);
+            doc.text(`Generated on: ${formatDateForDisplay(today.toISOString().split('T')[0])}`, 105, finalY + 50, { align: 'center' });
+            
+            // Save the PDF with proper name
+            doc.save(`Salary_${salaryRecord.workerName}_${salaryRecord.year}_${salaryRecord.monthName}.pdf`);
+        }
+        
+        // Toggle pin management visibility
+        function togglePinManagement() {
+            pinModal.style.display = 'flex';
+            updatePinOptionsVisibility();
+            resetPinForms();
+        }
+        
+        // Close pin management
+        function closePinManagement() {
+            pinModal.style.display = 'none';
+            resetPinForms();
+        }
+        
+        // Reset all pin forms
+        function resetPinForms() {
+            generatePinForm.classList.remove('active');
+            changePinForm.classList.remove('active');
+            deletePinForm.classList.remove('active');
+            pinOptions.style.display = 'flex';
+            
+            // Clear all inputs
+            newPinInput.value = '';
+            confirmNewPinInput.value = '';
+            oldPinInput.value = '';
+            newChangePinInput.value = '';
+            confirmChangePinInput.value = '';
+            currentPinInput.value = '';
+        }
+        
+        // Update pin options visibility based on whether pin exists
+        function updatePinOptionsVisibility() {
+            if (pin) {
+                generatePinBtn.style.display = 'none';
+                changePinBtn.style.display = '';
+                deletePinBtn.style.display = '';
+            } else {
+                generatePinBtn.style.display = '';
+                changePinBtn.style.display = 'none';
+                deletePinBtn.style.display = 'none';
+            }
+        }
+        
+        // Save new pin
+        function saveNewPin() {
+            const newPin = newPinInput.value;
+            const confirmPin = confirmNewPinInput.value;
+            
+            if (!newPin || !confirmPin) {
+                alert('Please enter and confirm your new PIN');
+                return;
+            }
+            
+            if (newPin.length !== 4 || !/^\d+$/.test(newPin)) {
+                alert('PIN must be 4 digits');
+                return;
+            }
+            
+            if (newPin !== confirmPin) {
+                alert('PINs do not match');
+                return;
+            }
+            
+            pin = newPin;
+            localStorage.setItem('app_pin', pin);
+            alert('PIN created successfully');
+            closePinManagement();
+            updatePinOptionsVisibility();
+        }
+        
+        // Change existing pin
+        function changePin() {
+            const oldPin = oldPinInput.value;
+            const newPin = newChangePinInput.value;
+            const confirmPin = confirmChangePinInput.value;
+            
+            if (!oldPin || !newPin || !confirmPin) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            if (oldPin !== pin) {
+                alert('Incorrect old PIN');
+                return;
+            }
+            
+            if (newPin.length !== 4 || !/^\d+$/.test(newPin)) {
+                alert('PIN must be 4 digits');
+                return;
+            }
+            
+            if (newPin !== confirmPin) {
+                alert('New PINs do not match');
+                return;
+            }
+            
+            pin = newPin;
+            localStorage.setItem('app_pin', pin);
+            alert('PIN changed successfully');
+            closePinManagement();
+        }
+        
+        // Delete existing pin
+        function deletePin() {
+            const currentPin = currentPinInput.value;
+            
+            if (!currentPin) {
+                alert('Please enter your current PIN');
+                return;
+            }
+            
+            if (currentPin !== pin) {
+                alert('Incorrect PIN');
+                return;
+            }
+            
+            pin = '';
+            localStorage.removeItem('app_pin');
+            alert('PIN deleted successfully');
+            closePinManagement();
+            updatePinOptionsVisibility();
+        }
+        
+        // Confirm before adding new year
+        function confirmAddNewYear() {
+            if (!pin) {
+                addNewYear();
+                return;
+            }
+            
+            const enteredPin = prompt('Enter PIN to add new year:');
+            if (enteredPin === pin) {
+                addNewYear();
+            } else if (enteredPin !== null) {
+                alert('Incorrect PIN');
+            }
+        }
+        
+        // Load saved years from localStorage
+        function loadSavedYears() {
+            const savedYears = JSON.parse(localStorage.getItem('years')) || [];
+            savedYears.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            });
+        }
+        
+        // Add a new year to the selector
+        function addNewYear() {
+            const newYear = currentYear + yearSelect.options.length - 1;
+            const option = document.createElement('option');
+            option.value = newYear;
+            option.textContent = newYear;
+            option.selected = true;
+            yearSelect.appendChild(option);
+            
+            // Save to localStorage
+            const savedYears = JSON.parse(localStorage.getItem('years')) || [];
+            if (!savedYears.includes(newYear)) {
+                savedYears.push(newYear);
+                localStorage.setItem('years', JSON.stringify(savedYears));
+            }
+            
+            // Enable month selection
+            monthSelect.disabled = false;
+            selectedYear = newYear;
+            
+            // Load workers for the dropdown
+            loadWorkers();
+        }
+        
+        // Handle year selection
+        function handleYearSelect() {
+            selectedYear = yearSelect.value;
+            if (selectedYear) {
+                monthSelect.disabled = false;
+                // Load workers for the selected year
+                loadWorkers();
+                updateAttendanceWorkerDropdown();
+            } else {
+                monthSelect.disabled = true;
+                proceedBtn.disabled = true;
+            }
+        }
+        
+        // Handle month selection
+        function handleMonthSelect() {
+            selectedMonth = monthSelect.value;
+            proceedBtn.disabled = !(selectedYear && selectedMonth);
+        }
+        
+        // Handle proceed button
+        function handleProceed() {
+            document.querySelector('.year-selection').style.display = 'none';
+            document.querySelector('.month-selection').style.display = 'none';
+            document.querySelector('.proceed-section').style.display = 'none';
+            mainOptions.style.display = 'flex';
+            
+            // Set attendance form year and month
+            document.getElementById('attendanceYear').value = selectedYear;
+            document.getElementById('attendanceMonth').value = months[selectedMonth - 1];
+        }
+        
+        // Handle back button
+        function handleBack() {
+            document.querySelector('.year-selection').style.display = 'block';
+            document.querySelector('.month-selection').style.display = 'block';
+            document.querySelector('.proceed-section').style.display = 'block';
+            mainOptions.style.display = 'flex';
+            
+            // Hide any open forms
+            workerDataForm.style.display = 'none';
+            attendanceForm.style.display = 'none';
+            salaryRecordSection.style.display = 'none';
+            reportsSection.style.display = 'none';
+            salarySheetView.style.display = 'none';
+        }
+        
+        // Show worker data form
+        function showWorkerDataForm() {
+            mainOptions.style.display = 'none';
+            workerDataForm.style.display = 'block';
+            
+            // Load workers if any
+            loadWorkers();
+        }
+        
+        // Search workers by name or ID
+        function searchWorkers() {
+            const searchTerm = workerSearch.value.toLowerCase();
+            const rows = workerTable.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const name = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+                const id = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || id.includes(searchTerm)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+        
+        // Handle worker form submission
+        function handleWorkerFormSubmit(e) {
+            e.preventDefault();
+            
+            const worker = {
+                name: document.getElementById('workerName').value,
+                id: document.getElementById('workerId').value,
+                department: document.getElementById('department').value,
+                mobile: document.getElementById('mobileNo').value,
+                address: document.getElementById('address').value,
+                salary: document.getElementById('basicSalary').value
+            };
+            
+            workers.push(worker);
+            saveWorkers();
+            addWorkerToTable(worker);
+            
+            // Reset form
+            workerForm.reset();
+            
+            // Update attendance worker dropdown
+            updateAttendanceWorkerDropdown();
+            updateSalaryWorkerDropdown();
+        }
+        
+        // Save workers to localStorage
+        function saveWorkers() {
+            localStorage.setItem('workers', JSON.stringify(workers));
+        }
+        
+        // Load workers from localStorage
+        function loadWorkers() {
+            workers = JSON.parse(localStorage.getItem('workers')) || [];
+            workerTable.innerHTML = '';
+            
+            workers.forEach(worker => {
+                addWorkerToTable(worker);
+            });
+            
+            // Update attendance worker dropdown
+            updateAttendanceWorkerDropdown();
+            updateSalaryWorkerDropdown();
+        }
+        
+        // Add worker to table
+        function addWorkerToTable(worker) {
+            const row = workerTable.insertRow();
+            
+            row.innerHTML = `
+                <td>${worker.name}</td>
+                <td>${worker.id}</td>
+                <td>${worker.department}</td>
+                <td>${worker.mobile}</td>
+                <td>${worker.salary}</td>
+                <td>
+                    <button class="action-btn view-btn">View</button>
+                    <button class="action-btn edit-btn">Edit</button>
+                    <button class="action-btn delete-btn">Delete</button>
+                    <button class="action-btn pdf-btn">PDF</button>
+                </td>
+            `;
+            
+            // Add event listeners to buttons
+            row.querySelector('.view-btn').addEventListener('click', () => viewWorkerDetails(worker));
+            row.querySelector('.edit-btn').addEventListener('click', () => editWorker(worker, row));
+            row.querySelector('.delete-btn').addEventListener('click', () => deleteWorker(worker.id));
+            row.querySelector('.pdf-btn').addEventListener('click', () => downloadWorkerPdf(worker));
+        }
+        
+        // View worker details
+        function viewWorkerDetails(worker) {
+            alert(`Worker Details:\n\nName: ${worker.name}\nID: ${worker.id}\nDepartment: ${worker.department}\nMobile: ${worker.mobile}\nAddress: ${worker.address}\nSalary: ${worker.salary}`);
+        }
+        
+        // Download worker details as PDF
+        function downloadWorkerPdf(worker) {
+            const doc = new jsPDF();
+            
+            doc.setFontSize(18);
+            doc.text('AS ENGINEERING - WORKER DETAILS', 105, 15, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.text(`Name: ${worker.name}`, 20, 30);
+            doc.text(`ID No.: ${worker.id}`, 20, 40);
+            doc.text(`Department: ${worker.department}`, 20, 50);
+            doc.text(`Mobile No.: ${worker.mobile}`, 20, 60);
+            doc.text(`Address: ${worker.address}`, 20, 70);
+            doc.text(`Basic Salary: ${worker.salary}`, 20, 80);
+            
+            // Add current date
+            const today = new Date();
+            doc.setFontSize(10);
+            doc.text(`Report generated on: ${formatDateForDisplay(today.toISOString().split('T')[0])}`, 105, 100, { align: 'center' });
+            
+            doc.save(`worker_${worker.id}_details.pdf`);
+        }
+        
+        // Edit worker
+        function editWorker(worker, row) {
+            if (pin) {
+                const enteredPin = prompt('Enter PIN to edit worker:');
+                if (enteredPin !== pin) {
+                    if (enteredPin !== null) {
+                        alert('Incorrect PIN');
+                    }
+                    return;
+                }
+            }
+            
+            document.getElementById('workerName').value = worker.name;
+            document.getElementById('workerId').value = worker.id;
+            document.getElementById('department').value = worker.department;
+            document.getElementById('mobileNo').value = worker.mobile;
+            document.getElementById('address').value = worker.address;
+            document.getElementById('basicSalary').value = worker.salary;
+            
+            // Remove the worker from the array
+            workers = workers.filter(w => w.id !== worker.id);
+            
+            // Remove the row from the table
+            row.remove();
+        }
+        
+        // Delete worker
+        function deleteWorker(id) {
+            if (pin) {
+                const enteredPin = prompt('Enter PIN to delete worker:');
+                if (enteredPin !== pin) {
+                    if (enteredPin !== null) {
+                        alert('Incorrect PIN');
+                    }
+                    return;
+                }
+            }
+            
+            if (confirm('Are you sure you want to delete this worker?')) {
+                workers = workers.filter(worker => worker.id !== id);
+                saveWorkers();
+                loadWorkers();
+                
+                // Also remove any attendance records for this worker
+                attendanceRecords = attendanceRecords.filter(record => record.workerId !== id);
+                saveAttendanceRecords();
+                
+                // Also remove any salary records for this worker
+                salaryRecords = salaryRecords.filter(record => record.workerId !== id);
+                saveSalaryRecords();
+            }
+        }
+        
+        // Show attendance form
+        function showAttendanceForm() {
+            mainOptions.style.display = 'none';
+            attendanceForm.style.display = 'block';
+            
+            // Set current date
+            const today = new Date();
+            document.getElementById('attendanceDate').valueAsDate = today;
+            
+            // Set year and month in the form
+            document.getElementById('attendanceYear').value = selectedYear;
+            document.getElementById('attendanceMonth').value = months[selectedMonth - 1];
+            
+            // Load attendance records
+            loadAttendanceRecords();
+        }
+        
+        // Search worker tables by name or ID
+        function searchWorkerTables() {
+            const searchTerm = workerNameSearch.value.trim().toLowerCase();
+            if (!searchTerm) {
+                // Show all nav buttons if search is empty
+                document.querySelectorAll('.table-nav-btn').forEach(btn => {
+                    btn.style.display = '';
+                });
+                return;
+            }
+            
+            // Filter nav buttons
+            document.querySelectorAll('.table-nav-btn').forEach(btn => {
+                const btnText = btn.textContent.toLowerCase();
+                if (btnText.includes(searchTerm)) {
+                    btn.style.display = '';
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+        }
+        
+        // Search attendance by day or full date
+        function searchAttendance() {
+            const searchTerm = attendanceSearch.value.trim();
+            if (!searchTerm) {
+                // Show all tables if search is empty
+                document.querySelectorAll('.worker-table').forEach(table => {
+                    const rows = table.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        row.style.display = '';
+                    });
+                });
+                return;
+            }
+            
+            // Check if searching by day (1-31)
+            if (/^\d{1,2}$/.test(searchTerm)) {
+                const day = parseInt(searchTerm);
+                if (day >= 1 && day <= 31) {
+                    document.querySelectorAll('.worker-table').forEach(table => {
+                        const rows = table.querySelectorAll('tbody tr');
+                        let hasMatches = false;
+                        
+                        rows.forEach(row => {
+                            const dateCell = row.cells[1].textContent;
+                            const dateParts = dateCell.split('-');
+                            const rowDay = parseInt(dateParts[0]);
+                            
+                            if (rowDay === day) {
+                                row.style.display = '';
+                                hasMatches = true;
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+            } 
+            // Check if searching by full date (DD-MM-YYYY)
+            else if (/^\d{2}-\d{2}-\d{4}$/.test(searchTerm)) {
+                document.querySelectorAll('.worker-table').forEach(table => {
+                    const rows = table.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        const dateCell = row.cells[1].textContent;
+                        
+                        if (dateCell === searchTerm) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        }
+        
+        // Format date for display (DD-MM-YYYY)
+        function formatDateForDisplay(dateStr) {
+            if (!dateStr) return '-';
+            const [year, month, day] = dateStr.split('-');
+            return `${day}-${month}-${year}`;
+        }
+        
+        // Format date for storage (YYYY-MM-DD)
+        function formatDateForStorage(dateStr) {
+            if (!dateStr) return '';
+            const [day, month, year] = dateStr.split('-');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // Handle attendance form submission
+        function handleAttendanceFormSubmit(e) {
+            e.preventDefault();
+            
+            const dateStr = document.getElementById('attendanceDate').value;
+            const [year, month, day] = dateStr.split('-');
+            const formattedDate = `${day}-${month}-${year}`;
+            
+            const record = {
+                date: dateStr,
+                formattedDate: formattedDate,
+                year: selectedYear,
+                month: selectedMonth,
+                workerId: attendanceWorker.value,
+                workerName: attendanceWorker.options[attendanceWorker.selectedIndex].text,
+                status: attendanceStatus.value,
+                timeIn: timeIn.value,
+                timeOut: timeOut.value,
+                actualWork: actualWork.value,
+                overTime: overTime.value,
+                totalWork: totalWork.value
+            };
+            
+            // Check if record already exists for this date and worker
+            const existingIndex = attendanceRecords.findIndex(r => 
+                r.date === record.date && r.workerId === record.workerId
+            );
+            
+            if (existingIndex >= 0) {
+                // Update existing record
+                attendanceRecords[existingIndex] = record;
+            } else {
+                // Add new record
+                attendanceRecords.push(record);
+            }
+            
+            saveAttendanceRecords();
+            loadAttendanceRecords();
+            
+            // Reset form
+            attendanceEntryForm.reset();
+            timeFields.style.display = 'none';
+            attendanceId.value = '';
+        }
+        
+        // Save attendance records to localStorage
+        function saveAttendanceRecords() {
+            localStorage.setItem(`attendance_${selectedYear}_${selectedMonth}`, JSON.stringify(attendanceRecords));
+        }
+        
+        // Load attendance records from localStorage
+        function loadAttendanceRecords() {
+            attendanceRecords = JSON.parse(localStorage.getItem(`attendance_${selectedYear}_${selectedMonth}`)) || [];
+            
+            // Clear existing tables and navigation
+            tableNav.innerHTML = '';
+            attendanceTablesContainer.innerHTML = '';
+            
+            // Group records by worker
+            const workersMap = new Map();
+            attendanceRecords.forEach(record => {
+                if (!workersMap.has(record.workerId)) {
+                    workersMap.set(record.workerId, {
+                        name: record.workerName,
+                        id: record.workerId,
+                        records: []
+                    });
+                }
+                workersMap.get(record.workerId).records.push(record);
+            });
+            
+            // Create tables for each worker
+            let firstTable = true;
+            workersMap.forEach((workerData, workerId) => {
+                const tableId = `table_${workerId}`;
+                
+                // Create navigation button
+                const navBtn = document.createElement('button');
+                navBtn.className = `table-nav-btn ${firstTable ? 'active' : ''}`;
+                navBtn.textContent = `${workerData.name} (${workerData.id})`;
+                navBtn.addEventListener('click', () => showWorkerTable(tableId));
+                tableNav.appendChild(navBtn);
+                
+                // Create table
+                const tableDiv = document.createElement('div');
+                tableDiv.className = `worker-table ${firstTable ? 'active' : ''}`;
+                tableDiv.id = tableId;
+                
+                const table = document.createElement('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                
+                thead.innerHTML = `
+                    <tr>
+                        <th>No.</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Total Hrs</th>
+                        <th>Actions</th>
+                    </tr>
+                `;
+                
+                workerData.records.forEach((record, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${formatDateForDisplay(record.date)}</td>
+                        <td>${getStatusText(record.status)}</td>
+                        <td>${formatTimeForDisplay(record.timeIn)}</td>
+                        <td>${formatTimeForDisplay(record.timeOut)}</td>
+                        <td>${record.totalWork || '-'}</td>
+                        <td>
+                            <button class="action-btn edit-btn">Edit</button>
+                            <button class="action-btn delete-btn">Delete</button>
+                            <button class="action-btn view-btn">View</button>
+                        </td>
+                    `;
+                    
+                    // Add event listeners to edit, delete and view buttons
+                    row.querySelector('.edit-btn').addEventListener('click', () => editAttendance(record));
+                    row.querySelector('.delete-btn').addEventListener('click', () => deleteAttendance(record.date, record.workerId));
+                    row.querySelector('.view-btn').addEventListener('click', () => viewAttendanceReport(record.workerId));
+                    
+                    tbody.appendChild(row);
+                });
+                
+                table.appendChild(thead);
+                table.appendChild(tbody);
+                tableDiv.appendChild(table);
+                attendanceTablesContainer.appendChild(tableDiv);
+                
+                if (firstTable) {
+                    activeTableId = tableId;
+                    firstTable = false;
+                }
+            });
+        }
+        
+        // Show specific worker table
+        function showWorkerTable(tableId) {
+            // Hide all tables
+            document.querySelectorAll('.worker-table').forEach(table => {
+                table.classList.remove('active');
+            });
+            
+            // Deactivate all nav buttons
+            document.querySelectorAll('.table-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected table
+            document.getElementById(tableId).classList.add('active');
+            
+            // Activate selected nav button
+            const buttons = document.querySelectorAll('.table-nav-btn');
+            buttons.forEach(btn => {
+                if (btn.textContent === document.getElementById(tableId).previousElementSibling.textContent) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            activeTableId = tableId;
+        }
+        
+        // Format time for display
+        function formatTimeForDisplay(time) {
+            if (!time) return '-';
+            
+            // Convert from 24-hour format to 12-hour format
+            const [hours, minutes] = time.split(':').map(Number);
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const hours12 = hours % 12 || 12;
+            return `${hours12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+        }
+        
+        // Get full status text
+        function getStatusText(status) {
+            switch(status) {
+                case 'P': return 'Present';
+                case 'A': return 'Absent';
+                case 'H': return 'Holiday';
+                case 'HP': return 'Holiday Present';
+                default: return status;
+            }
+        }
+        
+        // Edit attendance record
+        function editAttendance(record) {
+            document.getElementById('attendanceDate').value = record.date;
+            attendanceWorker.value = record.workerId;
+            attendanceId.value = record.workerId;
+            attendanceStatus.value = record.status;
+            
+            if (record.status === 'P' || record.status === 'HP') {
+                timeFields.style.display = 'block';
+                timeIn.value = record.timeIn;
+                timeOut.value = record.timeOut;
+                actualWork.value = record.actualWork;
+                overTime.value = record.overTime;
+                totalWork.value = record.totalWork;
+            } else {
+                timeFields.style.display = 'none';
+            }
+            
+            // Remove the record from the array
+            attendanceRecords = attendanceRecords.filter(r => 
+                !(r.date === record.date && r.workerId === record.workerId)
+            );
+            
+            // Reload tables
+            loadAttendanceRecords();
+        }
+        
+        // Delete attendance record
+        function deleteAttendance(date, workerId) {
+            if (confirm('Are you sure you want to delete this attendance record?')) {
+                attendanceRecords = attendanceRecords.filter(record => 
+                    !(record.date === date && record.workerId === workerId)
+                );
+                saveAttendanceRecords();
+                loadAttendanceRecords();
+            }
+        }
+        
+        // View attendance report for a worker
+        function viewAttendanceReport(workerId) {
+            // Load all workers from localStorage to ensure we find the worker
+            const allWorkers = JSON.parse(localStorage.getItem('workers')) || [];
+            currentWorkerReport = allWorkers.find(w => w.id === workerId);
+            
+            if (!currentWorkerReport) {
+                alert('Worker not found');
+                return;
+            }
+            
+            reportWorkerName.textContent = `Name: ${currentWorkerReport.name}`;
+            reportWorkerId.textContent = `ID No.: ${currentWorkerReport.id}`;
+            reportYearMonth.textContent = `Year: ${selectedYear}, Month: ${months[selectedMonth - 1]}`;
+            
+            // Filter records for this worker
+            const workerRecords = attendanceRecords.filter(record => record.workerId === workerId);
+            
+            // Populate report table
+            reportTable.innerHTML = '';
+            workerRecords.forEach(record => {
+                const row = reportTable.insertRow();
+                row.innerHTML = `
+                    <td>${formatDateForDisplay(record.date)}</td>
+                    <td>${getStatusText(record.status)}</td>
+                    <td>${formatTimeForDisplay(record.timeIn)}</td>
+                    <td>${formatTimeForDisplay(record.timeOut)}</td>
+                    <td>${record.actualWork || '-'}</td>
+                    <td>${record.overTime || '-'}</td>
+                    <td>${record.totalWork || '-'}</td>
+                `;
+            });
+            
+            // Calculate summary
+            const totalPresent = workerRecords.filter(r => r.status === 'P' || r.status === 'HP').length;
+            const totalAbsent = workerRecords.filter(r => r.status === 'A').length;
+            const totalHoliday = workerRecords.filter(r => r.status === 'H' || r.status === 'HP').length;
+            const totalHP = workerRecords.filter(r => r.status === 'HP').length;
+            
+            // Calculate work hours
+            let totalActualWork = 0;
+            let totalOverTime = 0;
+            
+            workerRecords.forEach(record => {
+                if (record.actualWork) totalActualWork += parseFloat(record.actualWork);
+                if (record.overTime) totalOverTime += parseFloat(record.overTime);
+            });
+            
+            const monthlyWorkHrs = totalActualWork + totalOverTime;
+            
+            document.getElementById('totalPresent').textContent = totalPresent;
+            document.getElementById('totalAbsent').textContent = totalAbsent;
+            document.getElementById('totalHoliday').textContent = totalHoliday;
+            document.getElementById('totalHP').textContent = totalHP;
+            document.getElementById('totalActualWork').textContent = totalActualWork.toFixed(2);
+            document.getElementById('totalOverTime').textContent = totalOverTime.toFixed(2);
+            document.getElementById('monthlyWorkHrs').textContent = monthlyWorkHrs.toFixed(2);
+            
+            // Show report
+            attendanceForm.style.display = 'none';
+            attendanceReport.style.display = 'block';
+        }
+        
+        // Download attendance as PDF
+        function downloadAttendancePdf() {
+            if (!currentWorkerReport) return;
+            
+            // Create new PDF document
+            const doc = new jsPDF();
+            
+            // Add border to the page
+            doc.setDrawColor(0);
+            doc.setLineWidth(0.5);
+            doc.rect(10, 10, 190, 277); // A4 size: 210x297mm, leaving 10mm margins
+            
+            // Add header with changed format
+            doc.setFontSize(18);
+            doc.text('AS ENGINEERING', 105, 20, { align: 'center' });
+            doc.setFontSize(16);
+            doc.text('ATTENDANCE REPORT', 105, 30, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text(`Worker: ${currentWorkerReport.name} (ID: ${currentWorkerReport.id})`, 105, 40, { align: 'center' });
+            doc.text(`Year: ${selectedYear}, Month: ${months[selectedMonth - 1]}`, 105, 50, { align: 'center' });
+            
+            // Add current date
+            const today = new Date();
+            doc.setFontSize(10);
+            doc.text(`Report generated on: ${formatDateForDisplay(today.toISOString().split('T')[0])}`, 105, 60, { align: 'center' });
+            
+            // Prepare data for the table
+            const workerRecords = attendanceRecords.filter(record => record.workerId === currentWorkerReport.id);
+            const tableData = workerRecords.map(record => [
+                formatDateForDisplay(record.date),
+                getStatusText(record.status),
+                formatTimeForDisplay(record.timeIn),
+                formatTimeForDisplay(record.timeOut),
+                record.actualWork || '-',
+                record.overTime || '-',
+                record.totalWork || '-'
+            ]);
+            
+            // Add table with darker borders
+            doc.autoTable({
+                head: [['Date', 'Status', 'Time In', 'Time Out', 'Actual Hrs', 'Overtime', 'Total Hrs']],
+                body: tableData,
+                startY: 70,
+                styles: {
+                    fontSize: 8,
+                    cellPadding: 2,
+                    overflow: 'linebreak',
+                    lineColor: [0, 0, 0], // Black borders
+                    lineWidth: 0.5
+                },
+                headStyles: {
+                    fillColor: [52, 152, 219],
+                    textColor: 255,
+                    lineWidth: 0.5
+                },
+                tableLineWidth: 0.5
+            });
+            
+            // Add summary
+            const totalPresent = workerRecords.filter(r => r.status === 'P' || r.status === 'HP').length;
+            const totalAbsent = workerRecords.filter(r => r.status === 'A').length;
+            const totalHoliday = workerRecords.filter(r => r.status === 'H' || r.status === 'HP').length;
+            const totalHP = workerRecords.filter(r => r.status === 'HP').length;
+            
+            // Calculate work hours
+            let totalActualWork = 0;
+            let totalOverTime = 0;
+            
+            workerRecords.forEach(record => {
+                if (record.actualWork) totalActualWork += parseFloat(record.actualWork);
+                if (record.overTime) totalOverTime += parseFloat(record.overTime);
+            });
+            
+            const monthlyWorkHrs = totalActualWork + totalOverTime;
+            
+            const finalY = doc.lastAutoTable.finalY + 10;
+            doc.setFontSize(12);
+            doc.text('SUMMARY', 105, finalY, { align: 'center' });
+            
+            // Add summary table with darker borders
+            doc.autoTable({
+                head: [['Particular', 'Value']],
+                body: [
+                    ['Total Present', totalPresent],
+                    ['Total Absent', totalAbsent],
+                    ['Total Holiday', totalHoliday],
+                    ['Total HP', totalHP],
+                    ['Total Actual Work Hrs', totalActualWork.toFixed(2)],
+                    ['Total Over Time', totalOverTime.toFixed(2)],
+                    ['Monthly Work Hrs', monthlyWorkHrs.toFixed(2)]
+                ],
+                startY: finalY + 10,
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 3,
+                    lineColor: [0, 0, 0], // Black borders
+                    lineWidth: 0.5
+                },
+                headStyles: {
+                    fillColor: [46, 204, 113],
+                    textColor: 255,
+                    lineWidth: 0.5
+                },
+                columnStyles: {
+                    0: { fontStyle: 'bold' }
+                },
+                tableLineWidth: 0.5
+            });
+            
+            // Add signature section
+            const signatureY = doc.lastAutoTable.finalY + 15;
+            doc.setFontSize(12);
+            doc.text('Receiver Signature', 50, signatureY + 20);
+            doc.text('Manager Signature', 150, signatureY + 20);
+            
+            // Add signature lines
+            doc.setLineWidth(0.5);
+            doc.line(40, signatureY + 25, 90, signatureY + 25);
+            doc.line(140, signatureY + 25, 190, signatureY + 25);
+            
+            // Save the PDF
+            doc.save(`attendance_report_${currentWorkerReport.id}_${selectedYear}_${selectedMonth}.pdf`);
+        }
+        
+        // Handle attendance status change
+        function handleAttendanceStatusChange() {
+            const status = attendanceStatus.value;
+            
+            if (status === 'P' || status === 'HP') {
+                timeFields.style.display = 'block';
+            } else {
+                timeFields.style.display = 'none';
+            }
+        }
+        
+        // Handle worker selection in attendance form
+        function handleWorkerSelect() {
+            const workerId = attendanceWorker.value;
+            const worker = workers.find(w => w.id === workerId);
+            
+            if (worker) {
+                attendanceId.value = worker.id;
+            } else {
+                attendanceId.value = '';
+            }
+        }
+        
+        // Update attendance worker dropdown
+        function updateAttendanceWorkerDropdown() {
+            attendanceWorker.innerHTML = '<option value="">-- Select Worker --</option>';
+            
+            // Load all workers from localStorage regardless of year
+            const allWorkers = JSON.parse(localStorage.getItem('workers')) || [];
+            
+            allWorkers.forEach(worker => {
+                const option = document.createElement('option');
+                option.value = worker.id;
+                option.textContent = worker.name;
+                attendanceWorker.appendChild(option);
+            });
+        }
+        
+        // Calculate work hours
+        function calculateWorkHours() {
+            if (!timeIn.value || !timeOut.value) return;
+            
+            // Parse times
+            const [inHour, inMinute] = timeIn.value.split(':').map(Number);
+            const [outHour, outMinute] = timeOut.value.split(':').map(Number);
+            
+            // Calculate total minutes
+            let totalMinutes = (outHour * 60 + outMinute) - (inHour * 60 + inMinute);
+            
+            // Check if time out is next day (unlikely for work hours)
+            if (totalMinutes < 0) {
+                totalMinutes += 24 * 60;
+            }
+            
+            // Deduct 1 hour for lunch if work is more than 6 hours (changed from 4 to 6)
+            if (totalMinutes > 6 * 60) {
+                totalMinutes -= 60;
+            }
+            
+            // Calculate actual work (max 8 hours) and overtime
+            let actualMinutes = Math.min(totalMinutes, 8 * 60);
+            let overtimeMinutes = Math.max(totalMinutes - 8 * 60, 0);
+            
+            // Convert to hours with 2 decimal places
+            const actualHours = (actualMinutes / 60).toFixed(2);
+            const overtimeHours = (overtimeMinutes / 60).toFixed(2);
+            const totalHours = (totalMinutes / 60).toFixed(2);
+            
+            // Update fields
+            actualWork.value = actualHours;
+            overTime.value = overtimeHours;
+            totalWork.value = totalHours;
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
